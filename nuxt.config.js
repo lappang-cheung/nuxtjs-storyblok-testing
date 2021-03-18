@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -36,12 +38,28 @@ export default {
     [
       'storyblok-nuxt',
       {
-        accessToken: 'Fyu5YHQpLYJQ3uhas8PFKgtt',
+        accessToken:
+          process.env.NODE_ENV === 'production'
+            ? 'L7aGtRQ14Y3yxXjoNllHzQtt'
+            : 'Fyu5YHQpLYJQ3uhas8PFKgtt',
         cacheProvider: 'memory',
       },
     ],
   ],
+  generate: {
+    routes() {
+      return axios
+        .get(
+          'https://api.storyblok.com/v1/cdn/stories?version=published&token=L7aGtRQ14Y3yxXjoNllHzQtt&start_with=blog&cv' +
+            Math.floor(Date.now() / 1e3)
+        )
+        .then((res) => {
+          const blogPosts = res.data.stories.map((bp) => bp.full_slug)
 
+          return ['/', '/blog', '/about', ...blogPosts]
+        })
+    },
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
