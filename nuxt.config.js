@@ -33,6 +33,13 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    [
+      'storyblok-nuxt',
+      {
+        accessToken: 'Fyu5YHQpLYJQ3uhas8PFKgtt',
+        cacheProvider: 'memory',
+      },
+    ],
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

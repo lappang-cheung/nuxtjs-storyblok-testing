@@ -18,25 +18,29 @@ export default {
   components: {
     PostPreview,
   },
-  data() {
-    return {
-      posts: [
-        {
-          title: 'A New Beginning',
-          previewText: "This will be awesome, don't miss it!",
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1615910388452-fdad95ebb038?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          id: 'a-new-beginning',
-        },
-        {
-          title: 'A Second Beginning',
-          previewText: "This will be awesome, don't miss it!",
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80',
-          id: 'a-second-beginning',
-        },
-      ],
-    }
+  asyncData(context) {
+    // // This what would we do in real project
+    // const version = context.query._storyblok || context.isDev ? 'draft' : 'published'
+    // const fullSlug = (context.route.path == '/' || context.route.path == '') ? 'home' : context.route.path
+
+    // Load the JSON from the API - loadig the home content (index page)
+    return context.app.$storyapi
+      .get('cdn/stories', {
+        version: 'draft',
+        starts_with: 'blog/',
+      })
+      .then((res) => {
+        return {
+          posts: res.data.stories.map((bp) => {
+            return {
+              id: bp.slug,
+              title: bp.content.title,
+              previewText: bp.content.summary,
+              thumbnailUrl: bp.content.thumbnail,
+            }
+          }),
+        }
+      })
   },
 }
 </script>
