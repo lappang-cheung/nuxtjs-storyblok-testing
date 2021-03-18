@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="id">
+  <router-link :to="'/blog/' + id">
     <article class="post-preview">
       <div
         :style="{ backgroundImage: 'url(' + thumbnailImage + ')' }"

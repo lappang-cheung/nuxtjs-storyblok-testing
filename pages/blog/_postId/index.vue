@@ -1,5 +1,5 @@
 <template>
-  <div id="post">
+  <div id="post" v-editable="blok">
     <div
       class="post-thumbnail"
       :style="{ backgroundImage: 'url(' + image + ')' }"
@@ -20,11 +20,17 @@ export default {
       })
       .then((res) => {
         return {
+          blok: res.data.story.content,
           image: res.data.story.content.thumbnail,
           title: res.data.story.content.title,
           content: res.data.story.content.content,
         }
       })
+  },
+  mounted() {
+    this.$storybridge.on('change', () => {
+      location.reload(true)
+    })
   },
 }
 </script>
